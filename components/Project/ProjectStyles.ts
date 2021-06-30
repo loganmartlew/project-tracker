@@ -1,0 +1,30 @@
+import styled from 'styled-components';
+
+export const ProjectContainer = styled.article`
+  padding: 1.5rem;
+  min-width: 254px;
+  max-width: 350px;
+  border-radius: 15px;
+  background-color: ${props => props.theme.color_primary};
+`;
+
+export const ProjectHeading = styled.h3`
+  margin-bottom: 0.5em;
+`;
+
+export const ProjectDescription = styled.p`
+  margin-bottom: 2em;
+`;
+
+export const StatusContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 2em;
+`;
+
+export const StatusBadge = styled.p`
+  padding: 0.2em 0.6em;
+  border-radius: 500px;
+  background-color: ${props => props.theme.color_primary_light};
+`;
