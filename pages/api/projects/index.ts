@@ -12,22 +12,22 @@ const handler: NextApiHandler = async (req, res) => {
       try {
         const projects = await ProjectModel.find({});
 
-        res.status(200).json({ projects });
+        return res.status(200).json(projects);
       } catch (error) {
-        res.status(400).json({ message: '400, Bad Request' });
+        return res.status(400).json({ message: '400, Bad Request' });
       }
       break;
     case 'POST':
       try {
         const project = await ProjectModel.create(req.body);
 
-        res.status(201).json({ project });
+        return res.status(201).json(project);
       } catch (error) {
-        res.status(400).json({ message: '400, Bad Request' });
+        return res.status(400).json({ message: '400, Bad Request' });
       }
       break;
     default:
-      res.status(400).json({ message: '400, Bad Request' });
+      return res.status(400).json({ message: '400, Bad Request' });
       break;
   }
 };

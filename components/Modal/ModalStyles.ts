@@ -16,9 +16,10 @@ export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
+  max-width: 90vw;
   background: white;
   border-radius: 15px;
-  padding: 15px;
+  padding: 2em;
   color: black;
   font-size: 1.1rem;
 `;

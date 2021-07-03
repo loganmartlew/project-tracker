@@ -19,13 +19,23 @@ const handler: NextApiHandler = async (req, res) => {
           return res.status(400).json({ message: '400, Bad Request' });
         }
 
-        res.status(200).json({ project });
+        return res.status(200).json(project);
       } catch (error) {
-        res.status(400).json({ message: '400, Bad Request', error });
+        return res.status(400).json({ message: '400, Bad Request', error });
+      }
+      break;
+    case 'delete':
+    case 'DELETE':
+      try {
+        await ProjectModel.findByIdAndDelete(id);
+
+        return res.status(200).send('Project deleted');
+      } catch (error) {
+        return res.status(400).json({ message: '400, Bad Request', error });
       }
       break;
     default:
-      res.status(400).json({ message: '400, Bad Request' });
+      return res.status(400).json({ message: '400, Bad Request' });
       break;
   }
 };

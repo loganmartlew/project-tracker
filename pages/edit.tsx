@@ -12,16 +12,19 @@ import Button from '@components/Button';
 import Modal from '@components/Modal';
 import ProjectName from '@components/projectForm/ProjectName';
 import ProjectDescription from '@components/projectForm/ProjectDescription';
+import ProjectFeatured from '@components/projectForm/ProjectFeatured';
 import ProjectLinks from '@components/projectForm/ProjectLinks';
 import ProjectDate from '@components/projectForm/ProjectDate';
 import ProjectStatus from '@components/projectForm/ProjectStatus';
 import ProjectMilestones from '@components/projectForm/ProjectMilestones';
-import { CreateForm, SaveButton } from '@components/pageStyles/NewStyles';
+import { CreateForm } from '@components/pageStyles/NewStyles';
 import { Link, Milestone, Project, Status } from '@types';
 
 const New: FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [missingField, setMissingField] = useState<string>('');
+
+  const [featured, setFeatured] = useState<boolean>(false);
 
   const [links, setLinks] = useState<Link[]>([]);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
@@ -114,6 +117,7 @@ const New: FC = () => {
     if (links.length > 0) {
       newProject.links = links;
     }
+    newProject.featured = featured;
     newProject.startDate = new Date(startDateRef.current.value);
     if (endDate && endDateRef.current) {
       newProject.endDate = endDateRef.current.value;
@@ -157,6 +161,8 @@ const New: FC = () => {
 
         <ProjectDescription descRef={descRef} />
 
+        <ProjectFeatured featured={featured} setFeatured={setFeatured} />
+
         <ProjectLinks
           links={links}
           deleteLink={deleteLink}
@@ -196,7 +202,7 @@ const New: FC = () => {
           addMilestone={addMilestone}
         />
 
-        <Button as='button' type='submit' color='success'>
+        <Button as='button' type='submit' color='success' block>
           Save Project
         </Button>
       </CreateForm>

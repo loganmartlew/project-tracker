@@ -1,4 +1,9 @@
+import { server } from '@config';
+import { FC } from 'react';
+import Link from 'next/link';
+import { useTheme } from 'styled-components';
 import ProgressBar from '@ramonak/react-progress-bar';
+import FeaturedIcon from '@components/FeaturedIcon';
 import {
   ProjectContainer,
   ProjectHeading,
@@ -6,32 +11,32 @@ import {
   StatusContainer,
   StatusBadge,
 } from './ProjectStyles';
-import { Milestone, Project } from '@types';
-import { FC } from 'react';
+import getProjectProgress from '@util/getProjectProgress';
+import { Project } from '@types';
+import { Theme } from '@styles/theme';
 
 interface ProjectProps {
   project: Project;
 }
 
 const ProjectComponent: FC<ProjectProps> = ({ project }) => {
-  const completedMilestones = project.milestones.reduce((count, curr) => {
-    if (curr.complete) return count + 1;
-    return count;
-  }, 0);
-
-  const progress = (completedMilestones / project.milestones.length) * 100;
+  const theme = useTheme() as Theme;
 
   return (
     <ProjectContainer>
-      <ProjectHeading>{project.name}</ProjectHeading>
+      <Link href={`${server}/project/${project._id}`} passHref>
+        <ProjectHeading>
+          {project.name} {project.featured && <FeaturedIcon />}
+        </ProjectHeading>
+      </Link>
       <ProjectDescription>{project.description}</ProjectDescription>
       <StatusContainer>
         <p>Status:</p>
         <StatusBadge>{project.status}</StatusBadge>
       </StatusContainer>
       <ProgressBar
-        completed={progress}
-        bgColor='#2fce7e'
+        completed={getProjectProgress(project)}
+        bgColor={theme.color_success}
         baseBgColor='#E9BCAF'
         isLabelVisible={false}
       />

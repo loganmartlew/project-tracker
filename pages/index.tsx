@@ -3,14 +3,15 @@ import { useState, useEffect, FC, ChangeEvent } from 'react';
 import { ContentWrapper } from '@components/pageStyles/HomeStyles';
 import Header from '@components/layout/Header';
 import ListFilters from '@components/ListFilters';
-import { Project, Status } from '@types';
 import ProjectList from '@components/ProjectList';
+import { Project } from '@types';
+import { GetStaticProps } from 'next';
 
-interface HomeProps {
+interface IProps {
   projects: Project[];
 }
 
-const Home: FC<HomeProps> = ({ projects }) => {
+const Home: FC<IProps> = ({ projects }) => {
   const [allProjects, setProjects] = useState<Project[]>(projects);
 
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
@@ -20,7 +21,7 @@ const Home: FC<HomeProps> = ({ projects }) => {
   useEffect(() => {
     fetch(`${server}/api/projects`)
       .then(res => res.json())
-      .then(({ projects }) => setProjects(projects));
+      .then(projects => setProjects(projects));
   }, []);
 
   // Filter on search
@@ -51,9 +52,9 @@ const Home: FC<HomeProps> = ({ projects }) => {
 
 export default Home;
 
-export const getStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(`${server}/api/projects`);
-  const { projects } = await res.json();
+  const projects = await res.json();
 
   return {
     props: {

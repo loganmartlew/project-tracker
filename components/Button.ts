@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 
 interface IProps {
-  lightText?: Boolean;
-  block?: Boolean;
+  lightText?: boolean;
+  block?: boolean;
   size?: 'sm' | 'md' | 'lg';
   color?: 'success' | 'danger';
+  contentWidth?: boolean;
 }
 
-export default styled.a<IProps>`
+export default styled.button<IProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,6 +20,12 @@ export default styled.a<IProps>`
   font-family: inherit;
   cursor: pointer;
   transition: 150ms ease-in-out;
+
+  ${({ contentWidth }) =>
+    contentWidth &&
+    `
+    width: max-content;
+  `}
 
   ${({ block }) =>
     block &&
@@ -36,8 +43,8 @@ export default styled.a<IProps>`
       `;
     } else if (size === 'sm') {
       return `
-      padding: 5px 8px;
-      font-size: 0.7em;
+      padding: 7px 13px;
+      font-size: 1em;
       `;
     } else {
       return `

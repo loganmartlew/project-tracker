@@ -15,8 +15,8 @@ const Header: FC<HeaderProps> = ({ withNewProjectBtn }) => {
         <Heading>Project Tracker</Heading>
       </Link>
       {withNewProjectBtn && (
-        <Link href='/new' passHref>
-          <Button href='/create' size='md'>
+        <Link href='/edit' passHref>
+          <Button as='a' href='/edit' size='md'>
             <FaPlus />
             New Project
           </Button>

@@ -1,3 +1,4 @@
+import theme from '@styles/theme';
 import styled from 'styled-components';
 
 export const ProjectContainer = styled.article`
@@ -9,7 +10,17 @@ export const ProjectContainer = styled.article`
 `;
 
 export const ProjectHeading = styled.h3`
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
   margin-bottom: 0.5em;
+  width: max-content;
+  transition: 100ms;
+  cursor: pointer;
+
+  &:hover {
+    color: ${({ theme }) => theme.color_primary_light};
+  }
 `;
 
 export const ProjectDescription = styled.p`
