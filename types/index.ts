@@ -7,7 +7,6 @@ export interface Project {
   endDate?: Date | string;
   dueDate?: Date | string;
   status: Status;
-  progress: number;
   milestones: Milestone[];
 }
 
@@ -18,7 +17,8 @@ export interface Link {
 
 export interface Milestone {
   name: string;
-  description: string;
+  description: string | undefined;
+  complete: boolean;
 }
 
 export enum Status {

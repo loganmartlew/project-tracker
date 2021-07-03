@@ -4,6 +4,7 @@ interface IProps {
   lightText?: Boolean;
   block?: Boolean;
   size?: 'sm' | 'md' | 'lg';
+  color?: 'success' | 'danger';
 }
 
 export default styled.a<IProps>`
@@ -11,10 +12,11 @@ export default styled.a<IProps>`
   justify-content: center;
   align-items: center;
   gap: 0.5em;
+  border: none;
   border-radius: 500px;
-  background-color: ${props => props.theme.color_primary};
   color: ${props => props.theme.color_white};
   font-weight: ${props => (props.lightText ? '400' : '500')};
+  font-family: inherit;
   cursor: pointer;
   transition: 150ms ease-in-out;
 
@@ -45,7 +47,39 @@ export default styled.a<IProps>`
     }
   }}
 
+  ${({ color, theme }) => {
+    switch (color) {
+      case 'success':
+        return `
+            background-color: ${theme.color_success};
+          `;
+      case 'danger':
+        return `
+            background-color: ${theme.color_danger};
+          `;
+      default:
+        return `
+            background-color: ${theme.color_primary};
+          `;
+    }
+  }}
+
   &:hover {
-    background-color: ${props => props.theme.color_primary_light};
+    ${({ color, theme }) => {
+      switch (color) {
+        case 'success':
+          return `
+            background-color: ${theme.color_success_light};
+          `;
+        case 'danger':
+          return `
+            background-color: ${theme.color_danger_light};
+          `;
+        default:
+          return `
+            background-color: ${theme.color_primary_light};
+          `;
+      }
+    }}
   }
 `;

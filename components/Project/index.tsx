@@ -6,7 +6,7 @@ import {
   StatusContainer,
   StatusBadge,
 } from './ProjectStyles';
-import { Project } from '@types';
+import { Milestone, Project } from '@types';
 import { FC } from 'react';
 
 interface ProjectProps {
@@ -14,6 +14,13 @@ interface ProjectProps {
 }
 
 const ProjectComponent: FC<ProjectProps> = ({ project }) => {
+  const completedMilestones = project.milestones.reduce((count, curr) => {
+    if (curr.complete) return count + 1;
+    return count;
+  }, 0);
+
+  const progress = (completedMilestones / project.milestones.length) * 100;
+
   return (
     <ProjectContainer>
       <ProjectHeading>{project.name}</ProjectHeading>
@@ -23,7 +30,7 @@ const ProjectComponent: FC<ProjectProps> = ({ project }) => {
         <StatusBadge>{project.status}</StatusBadge>
       </StatusContainer>
       <ProgressBar
-        completed={60}
+        completed={progress}
         bgColor='#2fce7e'
         baseBgColor='#E9BCAF'
         isLabelVisible={false}

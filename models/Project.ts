@@ -19,10 +19,6 @@ export const ProjectSchema = new Schema<Project>({
     type: String,
     required: [true, 'Project status required'],
   },
-  progress: {
-    type: Number,
-    required: [true, 'Project status required'],
-  },
   milestones: [
     {
       name: {

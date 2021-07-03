@@ -11,11 +11,11 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ withNewProjectBtn }) => {
   return (
     <StyledHeader>
-      <Link href='/'>
+      <Link href='/' passHref>
         <Heading>Project Tracker</Heading>
       </Link>
       {withNewProjectBtn && (
-        <Link href='/create'>
+        <Link href='/new' passHref>
           <Button href='/create' size='md'>
             <FaPlus />
             New Project
