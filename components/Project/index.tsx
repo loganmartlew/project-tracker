@@ -7,6 +7,7 @@ import FeaturedIcon from '@components/FeaturedIcon';
 import {
   ProjectContainer,
   ProjectHeading,
+  ProjectName,
   ProjectDescription,
   StatusContainer,
   StatusBadge,
@@ -24,11 +25,12 @@ const ProjectComponent: FC<ProjectProps> = ({ project }) => {
 
   return (
     <ProjectContainer>
-      <Link href={`${server}/project/${project._id}`} passHref>
-        <ProjectHeading>
-          {project.name} {project.featured && <FeaturedIcon />}
-        </ProjectHeading>
-      </Link>
+      <ProjectHeading>
+        <Link href={`${server}/project/${project._id}`} passHref>
+          <ProjectName>{project.name}</ProjectName>
+        </Link>
+        {project.featured && <FeaturedIcon />}
+      </ProjectHeading>
       <ProjectDescription>{project.description}</ProjectDescription>
       <StatusContainer>
         <p>Status:</p>

@@ -15,6 +15,7 @@ import ProgressBar from '@ramonak/react-progress-bar';
 import Header from '@components/layout/Header';
 import Modal from '@components/Modal';
 import Button from '@components/Button';
+import FeaturedIcon from '@components/FeaturedIcon';
 import {
   ProjectContainer,
   ModalText,
@@ -118,7 +119,7 @@ const ProjectPage: FC<IProps> = ({ project }) => {
         <MainSection>
           <TopRow>
             <Name>
-              {project.name} {project.featured && <AiFillStar />}
+              {project.name} {project.featured && <FeaturedIcon />}
             </Name>
             <ProjectButtons>
               <Link href={`${server}/projects/edit?id=${project._id}`} passHref>

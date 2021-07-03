@@ -35,6 +35,9 @@ export const TopRow = styled.div`
 `;
 
 export const Name = styled.h2`
+  display: flex;
+  align-self: center;
+  gap: 0.2em;
   font-size: 2rem;
 `;
 
