@@ -122,7 +122,7 @@ const ProjectPage: FC<IProps> = ({ project }) => {
               {project.name} {project.featured && <FeaturedIcon />}
             </Name>
             <ProjectButtons>
-              <Link href={`${server}/projects/edit?id=${project._id}`} passHref>
+              <Link href={`${server}/edit?id=${project._id}`} passHref>
                 <Button as='a' color='success' size='sm'>
                   Edit <AiFillEdit />
                 </Button>

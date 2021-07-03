@@ -4,9 +4,9 @@ export interface Project {
   description: string;
   featured: boolean;
   links?: Link[];
-  startDate: Date | string;
-  endDate?: Date | string;
-  dueDate?: Date | string;
+  startDate: Date;
+  endDate?: Date;
+  dueDate?: Date;
   status: Status;
   milestones: Milestone[];
 }

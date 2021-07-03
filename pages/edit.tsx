@@ -1,12 +1,14 @@
 import { server } from '@config';
 import {
   useState,
+  useEffect,
   useRef,
   FC,
   MouseEventHandler,
   FormEventHandler,
 } from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import Header from '@components/layout/Header';
 import Button from '@components/Button';
 import Modal from '@components/Modal';
@@ -19,8 +21,13 @@ import ProjectStatus from '@components/projectForm/ProjectStatus';
 import ProjectMilestones from '@components/projectForm/ProjectMilestones';
 import { CreateForm } from '@components/pageStyles/NewStyles';
 import { Link, Milestone, Project, Status } from '@types';
+import dbDateToInputString from '@util/dbDateToInputString';
 
-const New: FC = () => {
+interface IProps {
+  project?: Project;
+}
+
+const New: FC<IProps> = ({ project }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [missingField, setMissingField] = useState<string>('');
 
@@ -31,6 +38,9 @@ const New: FC = () => {
 
   const [endDate, setEndDate] = useState<boolean>(false);
   const [dueDate, setDueDate] = useState<boolean>(false);
+
+  const [endDateValue, setEndDateValue] = useState<string>('');
+  const [dueDateValue, setDueDateValue] = useState<string>('');
 
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
@@ -43,6 +53,30 @@ const New: FC = () => {
   const milestoneNameRef = useRef<HTMLInputElement>(null);
   const milestoneDescRef = useRef<HTMLTextAreaElement>(null);
   const milestoneCompleteRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (project) {
+      nameRef.current!.value = project.name;
+      descRef.current!.value = project.description;
+      setFeatured(project.featured);
+      if (project.links && project.links.length > 0) {
+        setLinks(project.links);
+      }
+      startDateRef.current!.value = dbDateToInputString(project.startDate);
+      if (project.endDate) {
+        setEndDate(true);
+        setEndDateValue(dbDateToInputString(project.endDate));
+      }
+      if (project.dueDate) {
+        setDueDate(true);
+        setDueDateValue(dbDateToInputString(project.dueDate));
+      }
+      statusRef.current!.value = project.status;
+      if (project.milestones && project.milestones.length > 0) {
+        setMilestones(project.milestones);
+      }
+    }
+  }, [project]);
 
   const router = useRouter();
 
@@ -132,15 +166,29 @@ const New: FC = () => {
 
     const project: Project = { ...newProject };
 
-    fetch(`${server}/api/projects`, {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(project),
-    }).then(() => {
-      router.push('/');
-    });
+    console.log(project);
+
+    if (project) {
+      fetch(`${server}/api/projects`, {
+        method: 'PATCH',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ id: router.query.id, project }),
+      }).then(() => {
+        router.push('/');
+      });
+    } else {
+      fetch(`${server}/api/projects`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(project),
+      }).then(() => {
+        router.push('/');
+      });
+    }
   };
 
   return (
@@ -179,6 +227,7 @@ const New: FC = () => {
           setDate={setEndDate}
           checked={endDate}
           dateRef={endDateRef}
+          defaultDate={endDateValue}
           optional
         />
 
@@ -188,6 +237,7 @@ const New: FC = () => {
           setDate={setDueDate}
           checked={dueDate}
           dateRef={dueDateRef}
+          defaultDate={dueDateValue}
           optional
         />
 
@@ -211,3 +261,26 @@ const New: FC = () => {
 };
 
 export default New;
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  const { id } = ctx.query;
+
+  if (!id)
+    return {
+      props: {},
+    };
+
+  const res = await fetch(`${server}/api/projects/${id}`);
+  const project = await res.json();
+
+  if (project.error)
+    return {
+      props: {},
+    };
+
+  return {
+    props: {
+      project,
+    },
+  };
+};

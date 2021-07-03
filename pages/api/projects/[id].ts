@@ -11,6 +11,7 @@ const handler: NextApiHandler = async (req, res) => {
   } = req;
 
   switch (method) {
+    case 'get':
     case 'GET':
       try {
         const project = await ProjectModel.findById(id);

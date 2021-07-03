@@ -8,11 +8,12 @@ interface IProps {
   dateRef: RefObject<HTMLInputElement>;
   setDate?: (value: SetStateAction<boolean>) => void;
   checked?: boolean;
+  defaultDate?: string;
   optional?: boolean;
 }
 
 const ProjectDate: FC<IProps> = props => {
-  const { id, label, setDate, checked, dateRef, optional } = props;
+  const { id, label, setDate, checked, dateRef, defaultDate, optional } = props;
 
   return (
     <FormSection htmlFor={id}>
@@ -31,7 +32,7 @@ const ProjectDate: FC<IProps> = props => {
         <DatePicker
           id={id}
           type='date'
-          defaultValue='2021-01-01'
+          defaultValue={defaultDate || '2021-01-01'}
           InputLabelProps={{
             shrink: true,
           }}
