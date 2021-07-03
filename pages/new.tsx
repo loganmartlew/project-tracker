@@ -9,6 +9,7 @@ import {
 import { useRouter } from 'next/router';
 import Header from '@components/layout/Header';
 import Button from '@components/Button';
+import Modal from '@components/Modal';
 import ProjectName from '@components/projectForm/ProjectName';
 import ProjectDescription from '@components/projectForm/ProjectDescription';
 import ProjectLinks from '@components/projectForm/ProjectLinks';
@@ -19,6 +20,9 @@ import { CreateForm, SaveButton } from '@components/pageStyles/NewStyles';
 import { Link, Milestone, Project, Status } from '@types';
 
 const New: FC = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [missingField, setMissingField] = useState<string>('');
+
   const [links, setLinks] = useState<Link[]>([]);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
 
@@ -90,14 +94,18 @@ const New: FC = () => {
     setMilestones(newMilestones);
   };
 
+  const showMissingField = (field: string) => {
+    setMissingField(field);
+    setModalOpen(true);
+  };
+
   const submit: FormEventHandler = e => {
     e.preventDefault();
 
-    if (!nameRef.current?.value) return;
-    if (!descRef.current?.value) return;
-    if (!startDateRef.current?.value) return;
-    console.log('HERE');
-    if (!statusRef.current?.value) return;
+    if (!nameRef.current?.value) return showMissingField('Name');
+    if (!descRef.current?.value) return showMissingField('Description');
+    if (!startDateRef.current?.value) return showMissingField('Start Date');
+    if (!statusRef.current?.value) return showMissingField('Status');
 
     const newProject: any = {};
 
@@ -135,6 +143,16 @@ const New: FC = () => {
     <>
       <Header />
       <CreateForm onSubmit={submit}>
+        <Modal show={modalOpen} setShow={setModalOpen}>
+          <p>
+            Field <b>&apos;{missingField}&apos;</b> is required.
+          </p>
+          <p>Please enter this field and resubmit.</p>
+          <Button as='button' onClick={() => setModalOpen(false)} size='md'>
+            Close
+          </Button>
+        </Modal>
+
         <ProjectName nameRef={nameRef} />
 
         <ProjectDescription descRef={descRef} />
