@@ -7,9 +7,64 @@ export const FiltersWrapper = styled.section`
   margin-bottom: 3rem;
 `;
 
-export const ButtonWrapper = styled.div`
+interface ButtonWrapperProps {
+  filtersOpen: boolean;
+}
+
+export const ButtonWrapper = styled.div<ButtonWrapperProps>`
   width: 100%;
-  max-width: 310px;
+
+  ${({ filtersOpen }) => {
+    if (filtersOpen) {
+      return `
+        & button {
+          max-width: 310px;
+        }
+      `;
+    } else {
+      return `
+        max-width: 310px;
+      `;
+    }
+  }}
+`;
+
+export const FilterSection = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em;
+  padding: 1.3em;
+  margin-top: 1em;
+  width: max-content;
+  border-radius: 15px;
+  background-color: ${({ theme }) => theme.color_primary};
+
+  @media only screen and (max-width: 660px) {
+    flex-direction: column;
+  }
+`;
+
+export const SectionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  width: max-content;
+`;
+
+export const SectionHeading = styled.h3``;
+
+export const FilterFieldContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+`;
+
+export const FiltersSelect = styled.select`
+  padding: 0.1em 0.6em;
+  min-width: 14ch;
+  border: none;
+  border-radius: 500px;
 `;
 
 export const SearchBox = styled.input`

@@ -1,6 +1,15 @@
 import { useState, FC, SetStateAction } from 'react';
 import { FaBars } from 'react-icons/fa';
-import { FiltersWrapper, ButtonWrapper, SearchBox } from './ListFiltersStyles';
+import {
+  FiltersWrapper,
+  ButtonWrapper,
+  FilterSection,
+  SectionContainer,
+  SectionHeading,
+  FilterFieldContainer,
+  FiltersSelect,
+  SearchBox,
+} from './ListFiltersStyles';
 import Button from '../Button';
 import { Filter, SortType, Status, SortField } from '@types';
 import { ChangeEventHandler } from 'react';
@@ -59,26 +68,26 @@ const ListFilters: FC<ListFiltersProps> = props => {
 
   return (
     <FiltersWrapper>
-      <ButtonWrapper>
+      <ButtonWrapper filtersOpen={filtersOpen}>
         <Button onClick={() => setFiltersOpen(prev => !prev)} lightText block>
           <FaBars />
           Sort Projects
         </Button>
         {filtersOpen && (
-          <section>
-            <div>
-              <h3>Filter</h3>
-              <span>
-                Featured Projects Only:{' '}
+          <FilterSection>
+            <SectionContainer>
+              <SectionHeading>Filter</SectionHeading>
+              <FilterFieldContainer as='span'>
+                <span>Featured Projects Only: </span>
                 <input
                   type='checkbox'
                   onChange={toggleFeatured}
                   checked={filter.featured}
                 />
-              </span>
-              <div>
-                <span>Status:</span>
-                <select
+              </FilterFieldContainer>
+              <FilterFieldContainer>
+                <span>Status: </span>
+                <FiltersSelect
                   onChange={changeStatus}
                   value={filter.status?.toString()}
                 >
@@ -88,31 +97,34 @@ const ListFilters: FC<ListFiltersProps> = props => {
                       {status}
                     </option>
                   ))}
-                </select>
-              </div>
-            </div>
-            <div>
-              <h3>Sort</h3>
-              <div>
-                <span>Sort Field:</span>
-                <select onChange={changeField} value={sort.field?.toString()}>
+                </FiltersSelect>
+              </FilterFieldContainer>
+            </SectionContainer>
+            <SectionContainer>
+              <SectionHeading>Sort</SectionHeading>
+              <FilterFieldContainer>
+                <span>Sort Field: </span>
+                <FiltersSelect
+                  onChange={changeField}
+                  value={sort.field?.toString()}
+                >
                   <option value={''}>None</option>
                   {Object.values(SortField).map((field, i) => (
                     <option value={field} key={i}>
                       {field}
                     </option>
                   ))}
-                </select>
-              </div>
-              <div>
-                <span>Order:</span>
-                <select onChange={changeOrder} value={sort.order}>
+                </FiltersSelect>
+              </FilterFieldContainer>
+              <FilterFieldContainer>
+                <span>Order: </span>
+                <FiltersSelect onChange={changeOrder} value={sort.order}>
                   <option value={'asc'}>Ascending</option>
                   <option value={'desc'}>Descending</option>
-                </select>
-              </div>
-            </div>
-          </section>
+                </FiltersSelect>
+              </FilterFieldContainer>
+            </SectionContainer>
+          </FilterSection>
         )}
       </ButtonWrapper>
       <label htmlFor='search' hidden>

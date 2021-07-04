@@ -15,6 +15,7 @@ export const ProjectHeading = styled.div`
   align-items: center;
   gap: 0.2em;
   margin-bottom: 0.5em;
+  min-width: max-content;
   font-size: 1.3rem;
 `;
 

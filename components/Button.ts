@@ -19,7 +19,7 @@ export default styled.button<IProps>`
   font-weight: ${props => (props.lightText ? '400' : '500')};
   font-family: inherit;
   cursor: pointer;
-  transition: 150ms ease-in-out;
+  transition: background-color 150ms ease-in-out;
 
   ${({ contentWidth }) =>
     contentWidth &&
