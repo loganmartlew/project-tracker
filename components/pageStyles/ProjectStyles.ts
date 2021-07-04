@@ -32,6 +32,8 @@ export const TopRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1em;
 `;
 
 export const Name = styled.h2`
@@ -39,6 +41,14 @@ export const Name = styled.h2`
   align-self: center;
   gap: 0.2em;
   font-size: 2rem;
+
+  @media only screen and (max-width: 720px) {
+    font-size: 1.5rem;
+  }
+
+  @media only screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
 
 export const ProjectButtons = styled.div`
