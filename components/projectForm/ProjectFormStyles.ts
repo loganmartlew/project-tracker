@@ -125,6 +125,7 @@ export const LinkURL = styled.p`
 interface LinkBtnProps {
   $fill?: boolean;
   milestone?: boolean;
+  sort?: boolean;
 }
 
 export const LinkBtn = styled.span<LinkBtnProps>`
@@ -134,7 +135,7 @@ export const LinkBtn = styled.span<LinkBtnProps>`
   transition: 100ms;
   cursor: pointer;
 
-  ${({ $fill, milestone, theme }) => {
+  ${({ $fill, milestone, sort, theme }) => {
     if ($fill) {
       return `
       padding: 3px 0;
@@ -150,6 +151,14 @@ export const LinkBtn = styled.span<LinkBtnProps>`
       return `
         &:hover {
           color: red;
+        }
+      `;
+    } else if (sort) {
+      return `
+        height: max-content;
+
+        &:hover {
+          color: ${theme.color_primary_light};
         }
       `;
     } else {
@@ -209,6 +218,16 @@ export const MilestoneItem = styled.li`
   & p {
     word-wrap: break-word;
   }
+`;
+
+export const MilestoneTopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const MilestoneMiddleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const MilestoneBottomRow = styled.div`

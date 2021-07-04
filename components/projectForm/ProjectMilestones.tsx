@@ -1,5 +1,6 @@
 import { FC, RefObject, MouseEventHandler, SetStateAction } from 'react';
 import { AiFillDelete, AiOutlinePlus } from 'react-icons/ai';
+import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
 import {
   FormSection,
   FormLabel,
@@ -9,6 +10,8 @@ import {
   MilestoneSection,
   MilestoneList,
   MilestoneItem,
+  MilestoneTopRow,
+  MilestoneMiddleRow,
   MilestoneBottomRow,
   MilestoneForm,
 } from './ProjectFormStyles';
@@ -58,6 +61,42 @@ const ProjectMilestones: FC<IProps> = props => {
     setMilestones(newMilestones);
   };
 
+  const toggleMilestoneComplete = (idx: number) => {
+    const newMilestones = [...milestones];
+
+    newMilestones[idx].complete = !newMilestones[idx].complete;
+
+    setMilestones([...newMilestones]);
+  };
+
+  const moveUp = (idx: number) => {
+    if (idx === 0) return;
+
+    const newMilestones = [...milestones];
+
+    const currMilestone = newMilestones[idx];
+    const prevMilestone = newMilestones[idx - 1];
+
+    newMilestones[idx] = prevMilestone;
+    newMilestones[idx - 1] = currMilestone;
+
+    setMilestones([...newMilestones]);
+  };
+
+  const moveDown = (idx: number) => {
+    if (milestones.length === idx + 1) return;
+
+    const newMilestones = [...milestones];
+
+    const currMilestone = newMilestones[idx];
+    const nextMilestone = newMilestones[idx + 1];
+
+    newMilestones[idx] = nextMilestone;
+    newMilestones[idx + 1] = currMilestone;
+
+    setMilestones([...newMilestones]);
+  };
+
   return (
     <FormSection htmlFor='milestones'>
       <FormLabel>Milestones</FormLabel>
@@ -65,10 +104,27 @@ const ProjectMilestones: FC<IProps> = props => {
         <MilestoneList>
           {milestones.map((milestone, i) => (
             <MilestoneItem key={i}>
-              <p>{milestone.name}</p>
-              <p>{milestone.description}</p>
+              <MilestoneTopRow>
+                <p>{milestone.name}</p>
+                <LinkBtn onClick={() => moveUp(i)} sort>
+                  <TiArrowSortedUp />
+                </LinkBtn>
+              </MilestoneTopRow>
+              <MilestoneMiddleRow>
+                <p>{milestone.description}</p>
+                <LinkBtn onClick={() => moveDown(i)} sort>
+                  <TiArrowSortedDown />
+                </LinkBtn>
+              </MilestoneMiddleRow>
               <MilestoneBottomRow>
-                <p>Status: {milestone.complete ? 'Complete' : 'Incomplete'}</p>
+                <p>
+                  Complete:{' '}
+                  <input
+                    type='checkbox'
+                    onChange={() => toggleMilestoneComplete(i)}
+                    checked={milestone.complete}
+                  />
+                </p>
                 <LinkBtn onClick={() => deleteMilestone(i)} milestone>
                   <AiFillDelete />
                 </LinkBtn>
