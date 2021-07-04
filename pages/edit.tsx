@@ -1,12 +1,5 @@
 import { server } from '@config';
-import {
-  useState,
-  useEffect,
-  useRef,
-  FC,
-  MouseEventHandler,
-  FormEventHandler,
-} from 'react';
+import { useState, useEffect, useRef, FC, FormEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import Header from '@components/layout/Header';
