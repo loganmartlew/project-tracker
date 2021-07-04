@@ -1,5 +1,5 @@
 import { server } from '@config';
-import { useState, useEffect, useRef, FC, FormEventHandler } from 'react';
+import { useState, useEffect, useRef, FC, MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import Header from '@components/layout/Header';
@@ -78,7 +78,7 @@ const New: FC<IProps> = ({ project }) => {
     setModalOpen(true);
   };
 
-  const submit: FormEventHandler = e => {
+  const submit: MouseEventHandler = e => {
     e.preventDefault();
 
     if (!nameRef.current?.value) return showMissingField('Name');
@@ -106,7 +106,7 @@ const New: FC<IProps> = ({ project }) => {
       newProject.milestones = milestones;
     }
 
-    const project: Project = { ...newProject };
+    const fullProject: Project = { ...newProject };
 
     if (project) {
       fetch(`${server}/api/projects`, {
@@ -114,10 +114,10 @@ const New: FC<IProps> = ({ project }) => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ id: router.query.id, project }),
+        body: JSON.stringify({ id: router.query.id, fullProject }),
       }).then(() => {
         const { id } = router.query;
-        router.push(`/${id && `project/${id}`}`);
+        router.push(`/${id ? `project/${id}` : ''}`);
       });
     } else {
       fetch(`${server}/api/projects`, {
@@ -125,7 +125,7 @@ const New: FC<IProps> = ({ project }) => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(project),
+        body: JSON.stringify(fullProject),
       }).then(() => {
         router.push('/');
       });
@@ -135,7 +135,11 @@ const New: FC<IProps> = ({ project }) => {
   return (
     <>
       <Header />
-      <CreateForm onSubmit={submit}>
+      <CreateForm
+        onSubmit={e => {
+          e.preventDefault();
+        }}
+      >
         <Modal show={modalOpen} setShow={setModalOpen}>
           <p>
             Field <b>&apos;{missingField}&apos;</b> is required.
@@ -191,7 +195,7 @@ const New: FC<IProps> = ({ project }) => {
           milestoneCompleteRef={milestoneCompleteRef}
         />
 
-        <Button as='button' type='submit' color='success' block>
+        <Button type='button' onClick={submit} color='success' block>
           Save Project
         </Button>
       </CreateForm>

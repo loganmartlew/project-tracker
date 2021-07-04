@@ -211,6 +211,13 @@ export const getStaticProps: GetStaticProps = async ctx => {
   }
 
   const res = await fetch(`${server}/api/projects/${projectId}`);
+
+  if (res.status !== 200) {
+    return {
+      notFound: true,
+    };
+  }
+
   const project = await res.json();
 
   return {

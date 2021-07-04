@@ -62,7 +62,8 @@ export const TextArea = styled.textarea<TextAreaProps>`
   width: 100%;
   min-width: 225px;
   max-width: 500px;
-  height: 150px;
+  height: max-content;
+  min-height: 150px;
   border: none;
   border-radius: 21px;
   outline: none;

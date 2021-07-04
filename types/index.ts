@@ -28,3 +28,20 @@ export enum Status {
   HOLD = 'On Hold',
   COMPLETE = 'Complete',
 }
+
+export interface Filter {
+  featured: boolean;
+  status: Status | string | null;
+}
+
+export enum SortField {
+  START_DATE = 'Start Date',
+  END_DATE = 'End Date',
+  DUE_DATE = 'Due Date',
+  PROGRESS = 'Progress',
+}
+
+export interface SortType {
+  field: SortField | string | null;
+  order: 'asc' | 'desc';
+}

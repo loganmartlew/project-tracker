@@ -1,7 +1,8 @@
-import theme from '@styles/theme';
 import styled from 'styled-components';
 
 export const ProjectContainer = styled.article`
+  display: flex;
+  flex-direction: column;
   padding: 1.5rem;
   min-width: 254px;
   max-width: 350px;
@@ -28,6 +29,7 @@ export const ProjectName = styled.h3`
 `;
 
 export const ProjectDescription = styled.p`
+  flex-grow: 1;
   margin-bottom: 2em;
 `;
 
