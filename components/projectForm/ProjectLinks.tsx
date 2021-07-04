@@ -42,7 +42,7 @@ const ProjectLinks: FC<IProps> = props => {
           <LinkItem>
             <TextInput type='text' placeholder='Name' ref={linkNameRef} small />
             <TextInput type='text' placeholder='URL' ref={linkUrlRef} small />
-            <LinkBtn onClick={addLink} fill>
+            <LinkBtn onClick={addLink} $fill>
               <AiOutlinePlus />
             </LinkBtn>
           </LinkItem>

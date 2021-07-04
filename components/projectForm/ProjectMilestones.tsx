@@ -71,7 +71,7 @@ const ProjectMilestones: FC<IProps> = props => {
                 ref={milestoneCompleteRef}
               />
             </label>
-            <LinkBtn onClick={addMilestone} fill>
+            <LinkBtn onClick={addMilestone} $fill>
               <AiOutlinePlus />
             </LinkBtn>
           </MilestoneForm>

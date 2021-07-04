@@ -36,8 +36,6 @@ const handler: NextApiHandler = async (req, res) => {
           req.body.project
         );
 
-        console.log(project);
-
         return res.status(200).json(project);
       } catch (error) {
         console.log('ERROR');

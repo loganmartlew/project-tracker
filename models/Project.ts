@@ -11,6 +11,10 @@ export const ProjectSchema = new Schema<Project>({
     type: String,
     required: [true, 'Project description required'],
   },
+  featured: {
+    type: Boolean,
+    required: [true, 'Featured status required'],
+  },
   startDate: Date,
   endDate: Date,
   dueDate: Date,

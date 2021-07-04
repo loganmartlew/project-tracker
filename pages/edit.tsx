@@ -166,8 +166,6 @@ const New: FC<IProps> = ({ project }) => {
 
     const project: Project = { ...newProject };
 
-    console.log(project);
-
     if (project) {
       fetch(`${server}/api/projects`, {
         method: 'PATCH',
@@ -176,7 +174,8 @@ const New: FC<IProps> = ({ project }) => {
         },
         body: JSON.stringify({ id: router.query.id, project }),
       }).then(() => {
-        router.push('/');
+        const { id } = router.query;
+        router.push(`/${id && `project/${id}`}`);
       });
     } else {
       fetch(`${server}/api/projects`, {

@@ -123,7 +123,7 @@ export const LinkURL = styled.p`
 `;
 
 interface LinkBtnProps {
-  fill?: boolean;
+  $fill?: boolean;
   milestone?: boolean;
 }
 
@@ -134,8 +134,8 @@ export const LinkBtn = styled.span<LinkBtnProps>`
   transition: 100ms;
   cursor: pointer;
 
-  ${({ fill, milestone, theme }) => {
-    if (fill) {
+  ${({ $fill, milestone, theme }) => {
+    if ($fill) {
       return `
       padding: 3px 0;
       border-radius: 500px;
