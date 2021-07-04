@@ -1,5 +1,4 @@
-import { Link } from '@types';
-import { FC, MouseEventHandler, RefObject } from 'react';
+import { FC, MouseEventHandler, RefObject, SetStateAction } from 'react';
 import { AiFillDelete, AiOutlinePlus } from 'react-icons/ai';
 import {
   FormSection,
@@ -12,17 +11,41 @@ import {
   LinkURL,
   LinkBtn,
 } from './ProjectFormStyles';
+import { Link } from '@types';
 
 interface IProps {
   links: Link[];
-  deleteLink: (idx: number) => void;
+  setLinks: (value: SetStateAction<Link[]>) => void;
   linkNameRef: RefObject<HTMLInputElement>;
   linkUrlRef: RefObject<HTMLInputElement>;
-  addLink: MouseEventHandler;
 }
 
 const ProjectLinks: FC<IProps> = props => {
-  const { links, deleteLink, linkNameRef, linkUrlRef, addLink } = props;
+  const { links, setLinks, linkNameRef, linkUrlRef } = props;
+
+  const addLink: MouseEventHandler = e => {
+    e.preventDefault();
+
+    const name = linkNameRef.current?.value;
+    const url = linkUrlRef.current?.value;
+
+    if (!name || !url) return;
+
+    linkNameRef.current!.value = '';
+    linkUrlRef.current!.value = '';
+
+    const link: Link = {
+      name,
+      url,
+    };
+
+    setLinks(prevLinks => [...prevLinks, link]);
+  };
+
+  const deleteLink = (idx: number) => {
+    const newLinks = links.filter((_, i) => i !== idx);
+    setLinks(newLinks);
+  };
 
   return (
     <FormSection>

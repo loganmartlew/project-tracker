@@ -54,6 +54,8 @@ const New: FC<IProps> = ({ project }) => {
   const milestoneDescRef = useRef<HTMLTextAreaElement>(null);
   const milestoneCompleteRef = useRef<HTMLInputElement>(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     if (project) {
       nameRef.current!.value = project.name;
@@ -77,59 +79,6 @@ const New: FC<IProps> = ({ project }) => {
       }
     }
   }, [project]);
-
-  const router = useRouter();
-
-  const addLink: MouseEventHandler = e => {
-    e.preventDefault();
-
-    const name = linkNameRef.current?.value;
-    const url = linkUrlRef.current?.value;
-
-    if (!name || !url) return;
-
-    linkNameRef.current!.value = '';
-    linkUrlRef.current!.value = '';
-
-    const link: Link = {
-      name,
-      url,
-    };
-
-    setLinks(prevLinks => [...prevLinks, link]);
-  };
-
-  const deleteLink = (idx: number) => {
-    const newLinks = links.filter((_, i) => i !== idx);
-    setLinks(newLinks);
-  };
-
-  const addMilestone: MouseEventHandler = e => {
-    e.preventDefault();
-
-    const name = milestoneNameRef.current?.value;
-    const description = milestoneDescRef.current?.value;
-    const complete = milestoneCompleteRef.current?.checked;
-
-    if (!name) return;
-
-    milestoneNameRef.current!.value = '';
-    milestoneDescRef.current!.value = '';
-    milestoneCompleteRef.current!.checked = false;
-
-    const milestone: Milestone = {
-      name,
-      description,
-      complete: complete || false,
-    };
-
-    setMilestones(prevMilestones => [...prevMilestones, milestone]);
-  };
-
-  const deleteMilestone = (idx: number) => {
-    const newMilestones = milestones.filter((_, i) => i !== idx);
-    setMilestones(newMilestones);
-  };
 
   const showMissingField = (field: string) => {
     setMissingField(field);
@@ -212,10 +161,9 @@ const New: FC<IProps> = ({ project }) => {
 
         <ProjectLinks
           links={links}
-          deleteLink={deleteLink}
+          setLinks={setLinks}
           linkNameRef={linkNameRef}
           linkUrlRef={linkUrlRef}
-          addLink={addLink}
         />
 
         <ProjectDate id='startdate' label='Start Date' dateRef={startDateRef} />
@@ -244,11 +192,10 @@ const New: FC<IProps> = ({ project }) => {
 
         <ProjectMilestones
           milestones={milestones}
-          deleteMilestone={deleteMilestone}
+          setMilestones={setMilestones}
           milestoneNameRef={milestoneNameRef}
           milestoneDescRef={milestoneDescRef}
           milestoneCompleteRef={milestoneCompleteRef}
-          addMilestone={addMilestone}
         />
 
         <Button as='button' type='submit' color='success' block>
