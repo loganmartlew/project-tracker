@@ -29,7 +29,7 @@ const Header: FC<HeaderProps> = ({ withNewProjectBtn }) => {
           </Link>
         )}
 
-        {withNewProjectBtn && (
+        {session && withNewProjectBtn && (
           <Link href='/edit' passHref>
             <Button as='a' href='/edit' size='md'>
               <FaPlus />

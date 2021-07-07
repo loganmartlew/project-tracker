@@ -3,6 +3,7 @@ import { useState, useEffect, FC, MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useSession } from 'next-auth/client';
 import { AiFillGithub, AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { HiDocumentText } from 'react-icons/hi';
 import { FiLink2 } from 'react-icons/fi';
@@ -46,6 +47,8 @@ const ProjectPage: FC<IProps> = ({ project: propsProject }) => {
   const [project, setProject] = useState<Project>(propsProject);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const [session, loading] = useSession();
 
   const router = useRouter();
 
@@ -129,16 +132,18 @@ const ProjectPage: FC<IProps> = ({ project: propsProject }) => {
             <Name>
               {project.name} {project.featured && <FeaturedIcon />}
             </Name>
-            <ProjectButtons>
-              <Link href={`${server}/edit?id=${project._id}`} passHref>
-                <Button as='a' color='success' size='sm'>
-                  Edit <AiFillEdit />
+            {session && (
+              <ProjectButtons>
+                <Link href={`${server}/edit?id=${project._id}`} passHref>
+                  <Button as='a' color='success' size='sm'>
+                    Edit <AiFillEdit />
+                  </Button>
+                </Link>
+                <Button onClick={confirmDelete} color='danger' size='sm'>
+                  Delete <AiFillDelete />
                 </Button>
-              </Link>
-              <Button onClick={confirmDelete} color='danger' size='sm'>
-                Delete <AiFillDelete />
-              </Button>
-            </ProjectButtons>
+              </ProjectButtons>
+            )}
           </TopRow>
           <Description>{project.description}</Description>
           <StatusContainer>

@@ -2,6 +2,7 @@ import { server } from '@config';
 import { useState, useEffect, useRef, FC, MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import Header from '@components/layout/Header';
 import Button from '@components/Button';
 import Modal from '@components/Modal';
@@ -206,6 +207,17 @@ const Edit: FC<IProps> = ({ project }) => {
 export default Edit;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
+  const session = await getSession({ req: ctx.req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    };
+  }
+
   const { id } = ctx.query;
 
   if (!id)
