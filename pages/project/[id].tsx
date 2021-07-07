@@ -1,14 +1,9 @@
 import { server } from '@config';
-import { useState, FC, MouseEventHandler } from 'react';
+import { useState, useEffect, FC, MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import {
-  AiFillStar,
-  AiFillGithub,
-  AiFillEdit,
-  AiFillDelete,
-} from 'react-icons/ai';
+import { AiFillGithub, AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { HiDocumentText } from 'react-icons/hi';
 import { FiLink2 } from 'react-icons/fi';
 import ProgressBar from '@ramonak/react-progress-bar';
@@ -45,12 +40,25 @@ interface IProps {
   project: Project;
 }
 
-const ProjectPage: FC<IProps> = ({ project }) => {
+const ProjectPage: FC<IProps> = ({ project: propsProject }) => {
+  projStringToDate(propsProject);
+
+  const [project, setProject] = useState<Project>(propsProject);
+
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const router = useRouter();
 
-  projStringToDate(project);
+  const projectId = router.query.id;
+
+  useEffect(() => {
+    fetch(`${server}/api/projects/${projectId}`)
+      .then(res => res.json())
+      .then(data => {
+        projStringToDate(data);
+        setProject(data);
+      });
+  }, [propsProject, projectId]);
 
   const hasLinks = (project.links?.length &&
     project.links.length > 0) as boolean;
@@ -222,6 +230,7 @@ export const getStaticProps: GetStaticProps = async ctx => {
 
   return {
     props: { project },
+    revalidate: 43200, // 12 hrs
   };
 };
 

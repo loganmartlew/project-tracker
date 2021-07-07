@@ -20,7 +20,7 @@ interface IProps {
   project?: Project;
 }
 
-const New: FC<IProps> = ({ project }) => {
+const Edit: FC<IProps> = ({ project }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [missingField, setMissingField] = useState<string>('');
 
@@ -203,7 +203,7 @@ const New: FC<IProps> = ({ project }) => {
   );
 };
 
-export default New;
+export default Edit;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
   const { id } = ctx.query;
