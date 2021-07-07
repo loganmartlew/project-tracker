@@ -115,7 +115,7 @@ const Edit: FC<IProps> = ({ project }) => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ id: router.query.id, fullProject }),
+        body: JSON.stringify({ id: router.query.id, project: fullProject }),
       }).then(() => {
         const { id } = router.query;
         router.push(`/${id ? `project/${id}` : ''}`);

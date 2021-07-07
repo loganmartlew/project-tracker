@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 export interface Project {
   _id?: string;
   name: string;
@@ -45,3 +47,7 @@ export interface SortType {
   field: SortField | string | null;
   order: 'asc' | 'desc';
 }
+
+export type MethodHandler = (
+  req: NextApiRequest
+) => Promise<{ status: number; message: string; data: any }>;
