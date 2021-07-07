@@ -27,3 +27,20 @@ export const Heading = styled.h1`
     font-size: 3rem;
   }
 `;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  width: max-content;
+`;
+
+export const AuthButton = styled.a`
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 100ms;
+
+  &:hover {
+    color: ${({ theme }) => theme.color_primary_light};
+  }
+`;

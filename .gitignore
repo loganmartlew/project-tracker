@@ -19,6 +19,7 @@ next.config.js
 # misc
 .DS_Store
 *.pem
+generatePassword.js
 
 # debug
 npm-debug.log*
