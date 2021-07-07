@@ -32,8 +32,8 @@ import {
   Milestone,
   MilestoneBadge,
 } from '@components/pageStyles/ProjectStyles';
-import projStringToDate from '@util/projStringToDate';
-import getProjectProgress from '@util/getProjectProgress';
+import projStringToDate from '@util/project/projStringToDate';
+import getProjectProgress from '@util/project/getProjectProgress';
 import { Project } from '@types';
 
 interface IProps {

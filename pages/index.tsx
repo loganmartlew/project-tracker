@@ -1,13 +1,13 @@
 import { server } from '@config';
-import { useState, useEffect, FC, ChangeEvent } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { ContentWrapper } from '@components/pageStyles/HomeStyles';
 import Header from '@components/layout/Header';
 import ListFilters from '@components/ListFilters';
 import ProjectList from '@components/ProjectList';
-import { Filter, Project, SortType, Status } from '@types';
+import { Filter, Project, SortType } from '@types';
 import { GetStaticProps } from 'next';
-import projStringToDate from '@util/projStringToDate';
-import getProjectProgress from '@util/getProjectProgress';
+import projStringToDate from '@util/project/projStringToDate';
+import getProjectProgress from '@util/project/getProjectProgress';
 
 interface IProps {
   projects: Project[];

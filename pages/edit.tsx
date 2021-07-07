@@ -14,7 +14,7 @@ import ProjectStatus from '@components/projectForm/ProjectStatus';
 import ProjectMilestones from '@components/projectForm/ProjectMilestones';
 import { CreateForm } from '@components/pageStyles/NewStyles';
 import { Link, Milestone, Project, Status } from '@types';
-import dbDateToInputString from '@util/dbDateToInputString';
+import dbDateToInputString from '@util/db/dbDateToInputString';
 
 interface IProps {
   project?: Project;

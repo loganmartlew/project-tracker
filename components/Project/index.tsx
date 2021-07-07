@@ -12,7 +12,7 @@ import {
   StatusContainer,
   StatusBadge,
 } from './ProjectStyles';
-import getProjectProgress from '@util/getProjectProgress';
+import getProjectProgress from '@util/project/getProjectProgress';
 import { Project } from '@types';
 import { Theme } from '@styles/theme';
 

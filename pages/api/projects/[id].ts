@@ -1,4 +1,4 @@
-import dbConnect from '@util/dbConnect';
+import dbConnect from '@util/db/dbConnect';
 import { ProjectModel } from '@models/Project';
 import { NextApiHandler } from 'next';
 
