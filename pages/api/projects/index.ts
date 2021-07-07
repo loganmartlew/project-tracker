@@ -11,12 +11,10 @@ const handler: NextApiHandler = async (req, res) => {
 
   const session = await getSession({ req });
 
-  let resData;
-
   switch (method) {
     case 'get':
     case 'GET':
-      resData = await getHandler(req);
+      await getHandler(req, res);
       break;
     case 'post':
     case 'POST':
@@ -24,7 +22,7 @@ const handler: NextApiHandler = async (req, res) => {
         return res.status(401).json({ message: 'Unauthorized request' });
       }
 
-      resData = await postHandler(req);
+      await postHandler(req, res);
       break;
     case 'patch':
     case 'PATCH':
@@ -32,45 +30,49 @@ const handler: NextApiHandler = async (req, res) => {
         return res.status(401).json({ message: 'Unauthorized request' });
       }
 
-      resData = await patchHandler(req);
+      await patchHandler(req, res);
       break;
     default:
       return res.status(405).json({ message: 'Method not allowed' });
   }
-
-  return res
-    .status(resData.status)
-    .json(resData.data || { message: resData.message });
 };
 
 export default handler;
 
-const getHandler: MethodHandler = async req => {
+const getHandler: MethodHandler = async (req, res) => {
   try {
     const projects = await ProjectModel.find({});
 
-    return { status: 200, message: 'Projects found', data: projects };
+    res.status(200).json(projects);
   } catch (error) {
-    return { status: 400, message: 'Bad request', data: null };
+    res.status(400).json({ message: 'Bad request' });
   }
 };
 
-const postHandler: MethodHandler = async req => {
+const postHandler: MethodHandler = async (req, res) => {
+  if (!req.body) {
+    res.status(422).json({ message: 'Invalid input' });
+  }
+
   try {
     await ProjectModel.create(req.body);
 
-    return { status: 201, message: 'Project created', data: null };
+    res.status(201).json({ message: 'Project created' });
   } catch (error) {
-    return { status: 400, message: 'Bad request', data: null };
+    res.status(400).json({ message: 'Bad request' });
   }
 };
 
-const patchHandler: MethodHandler = async req => {
+const patchHandler: MethodHandler = async (req, res) => {
+  if (!req.body.id || !req.body.project) {
+    res.status(422).json({ message: 'Invalid input' });
+  }
+
   try {
     await ProjectModel.findByIdAndUpdate(req.body.id, req.body.project);
 
-    return { status: 200, message: 'Project updated', data: null };
+    res.status(200).json({ message: 'Project updated' });
   } catch (error) {
-    return { status: 400, message: 'Bad request', data: null };
+    res.status(400).json({ message: 'Bad request' });
   }
 };
