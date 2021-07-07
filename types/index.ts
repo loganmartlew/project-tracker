@@ -48,4 +48,7 @@ export interface SortType {
   order: 'asc' | 'desc';
 }
 
-export type MethodHandler = (req: NextApiRequest, res: NextApiResponse) => void;
+export type MethodHandler = (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => Promise<void>;
