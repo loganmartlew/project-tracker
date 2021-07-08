@@ -51,6 +51,8 @@ const deleteHandler: MethodHandler = async (req, res) => {
   try {
     await deleteProject(id as string);
 
+    fetch(process.env.DEPLOY_HOOK!);
+
     res.status(200).send('Project deleted');
   } catch (error) {
     res.status(400).json({ message: 'Bad Request' });

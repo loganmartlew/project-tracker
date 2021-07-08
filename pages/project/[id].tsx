@@ -236,7 +236,7 @@ export const getStaticProps: GetStaticProps = async ctx => {
 
   return {
     props: { project: serializedProject },
-    revalidate: 600,
+    revalidate: 43200, // 12hrs
   };
 };
 

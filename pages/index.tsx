@@ -181,6 +181,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       projects: serializedProjects,
     },
-    revalidate: 600,
+    revalidate: 43200, // 12hrs
   };
 };
