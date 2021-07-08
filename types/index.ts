@@ -1,16 +1,26 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export interface Project {
-  _id?: string;
+interface ProjectData {
   name: string;
   description: string;
   featured: boolean;
   links?: Link[];
+  status: Status;
+  milestones: Milestone[];
+}
+
+export interface Project extends ProjectData {
+  _id?: Date;
   startDate: Date;
   endDate?: Date;
   dueDate?: Date;
-  status: Status;
-  milestones: Milestone[];
+}
+
+export interface SerializedProject extends ProjectData {
+  _id?: string;
+  startDate: string;
+  endDate?: string;
+  dueDate?: string;
 }
 
 export interface Link {

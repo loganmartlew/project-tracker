@@ -1,10 +1,9 @@
 import { getSession } from 'next-auth/client';
-import dbConnect from '@util/db/dbConnect';
-import { ProjectModel } from '@models/Project';
 import { NextApiHandler } from 'next';
 import { MethodHandler } from '@types';
-
-dbConnect();
+import getProjects from '@util/db/getProjects';
+import createProject from '@util/db/createProject';
+import updateProject from '@util/db/updateProject';
 
 const handler: NextApiHandler = async (req, res) => {
   const { method } = req;
@@ -41,7 +40,7 @@ export default handler;
 
 const getHandler: MethodHandler = async (req, res) => {
   try {
-    const projects = await ProjectModel.find({});
+    const projects = await getProjects();
 
     res.status(200).json(projects);
   } catch (error) {
@@ -55,7 +54,7 @@ const postHandler: MethodHandler = async (req, res) => {
   }
 
   try {
-    await ProjectModel.create(req.body);
+    await createProject(req.body);
 
     res.status(201).json({ message: 'Project created' });
   } catch (error) {
@@ -69,7 +68,7 @@ const patchHandler: MethodHandler = async (req, res) => {
   }
 
   try {
-    await ProjectModel.findByIdAndUpdate(req.body.id, req.body.project);
+    await updateProject(req.body.id, req.body.project);
 
     res.status(200).json({ message: 'Project updated' });
   } catch (error) {

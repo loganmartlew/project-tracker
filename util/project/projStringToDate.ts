@@ -1,13 +1,14 @@
-import { Project } from '@types';
+import { Project, SerializedProject } from '@types';
 
-const projStringToDate = (project: Project) => {
-  project.startDate = new Date(project.startDate);
-  if (project.endDate) {
-    project.endDate = new Date(project.endDate);
-  }
-  if (project.dueDate) {
-    project.dueDate = new Date(project.dueDate);
-  }
+const projStringToDate = (project: SerializedProject) => {
+  const newProject = {
+    ...project,
+    startDate: new Date(project.startDate),
+    endDate: project.endDate ? new Date(project.endDate) : null,
+    dueDate: project.dueDate ? new Date(project.dueDate) : null,
+  };
+
+  return newProject as Project;
 };
 
 export default projStringToDate;

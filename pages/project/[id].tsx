@@ -1,4 +1,3 @@
-import { server } from '@config';
 import { useState, useEffect, FC, MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -33,18 +32,21 @@ import {
   Milestone,
   MilestoneBadge,
 } from '@components/pageStyles/ProjectStyles';
+import getProject from '@util/db/getProject';
 import projStringToDate from '@util/project/projStringToDate';
 import getProjectProgress from '@util/project/getProjectProgress';
-import { Project } from '@types';
+import { Project, SerializedProject } from '@types';
+import getProjects from '@util/db/getProjects';
+import serializeProject from '@util/project/serializeProject';
 
 interface IProps {
-  project: Project;
+  project: SerializedProject;
 }
 
 const ProjectPage: FC<IProps> = ({ project: propsProject }) => {
-  projStringToDate(propsProject);
-
-  const [project, setProject] = useState<Project>(propsProject);
+  const [project, setProject] = useState<Project>(
+    projStringToDate(propsProject)
+  );
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -55,11 +57,10 @@ const ProjectPage: FC<IProps> = ({ project: propsProject }) => {
   const projectId = router.query.id;
 
   useEffect(() => {
-    fetch(`${server}/api/projects/${projectId}`)
+    fetch(`/api/projects/${projectId}`)
       .then(res => res.json())
       .then(data => {
-        projStringToDate(data);
-        setProject(data);
+        setProject(projStringToDate(data));
       });
   }, [propsProject, projectId]);
 
@@ -95,7 +96,7 @@ const ProjectPage: FC<IProps> = ({ project: propsProject }) => {
 
     setModalOpen(false);
 
-    fetch(`${server}/api/projects/${project._id}`, {
+    fetch(`/api/projects/${project._id}`, {
       method: 'delete',
     })
       .then(res => {
@@ -134,7 +135,7 @@ const ProjectPage: FC<IProps> = ({ project: propsProject }) => {
             </Name>
             {session && (
               <ProjectButtons>
-                <Link href={`${server}/edit?id=${project._id}`} passHref>
+                <Link href={`/edit?id=${project._id}`} passHref>
                   <Button as='a' color='success' size='sm'>
                     Edit <AiFillEdit />
                   </Button>
@@ -223,35 +224,34 @@ export const getStaticProps: GetStaticProps = async ctx => {
     };
   }
 
-  const res = await fetch(`${server}/api/projects/${projectId}`);
+  const project = await getProject(projectId as string);
 
-  if (res.status !== 200) {
+  if (!project) {
     return {
       notFound: true,
     };
   }
 
-  const project = await res.json();
+  const serializedProject = serializeProject(project);
 
   return {
-    props: { project },
+    props: { project: serializedProject },
     revalidate: 43200, // 12 hrs
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  interface DBProject extends Project {
-    _id: string;
-  }
-
-  const res = await fetch(`${server}/api/projects`);
-  const projects: DBProject[] = await res.json();
+  const projects = await getProjects();
 
   const featuredProjects = projects.filter(project => project.featured);
 
-  const paths = featuredProjects.map(project => ({
-    params: { id: project._id },
-  }));
+  const paths = featuredProjects.map(project => {
+    const serializedProject = serializeProject(project);
+
+    return {
+      params: { id: serializedProject._id },
+    };
+  });
 
   return {
     paths,

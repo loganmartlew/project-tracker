@@ -1,10 +1,8 @@
-import dbConnect from '@util/db/dbConnect';
-import { ProjectModel } from '@models/Project';
 import { NextApiHandler } from 'next';
 import { getSession } from 'next-auth/client';
 import { MethodHandler } from '@types';
-
-dbConnect();
+import getProject from '@util/db/getProject';
+import deleteProject from '@util/db/deleteProject';
 
 const handler: NextApiHandler = async (req, res) => {
   const { method } = req;
@@ -35,7 +33,7 @@ const getHandler: MethodHandler = async (req, res) => {
   const { id } = req.query;
 
   try {
-    const project = await ProjectModel.findById(id);
+    const project = await getProject(id as string);
 
     if (!project) {
       return res.status(422).json({ message: 'Project not found' });
@@ -51,7 +49,7 @@ const deleteHandler: MethodHandler = async (req, res) => {
   const { id } = req.query;
 
   try {
-    await ProjectModel.findByIdAndDelete(id);
+    await deleteProject(id as string);
 
     res.status(200).send('Project deleted');
   } catch (error) {

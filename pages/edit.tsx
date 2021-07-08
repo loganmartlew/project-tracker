@@ -1,4 +1,3 @@
-import { server } from '@config';
 import { useState, useEffect, useRef, FC, MouseEventHandler } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
@@ -16,6 +15,8 @@ import ProjectMilestones from '@components/projectForm/ProjectMilestones';
 import { CreateForm } from '@components/pageStyles/NewStyles';
 import { Link, Milestone, Project, Status } from '@types';
 import dbDateToInputString from '@util/db/dbDateToInputString';
+import getProject from '@util/db/getProject';
+import serializeProject from '@util/project/serializeProject';
 
 interface IProps {
   project?: Project;
@@ -110,7 +111,7 @@ const Edit: FC<IProps> = ({ project }) => {
     const fullProject: Project = { ...newProject };
 
     if (project) {
-      fetch(`${server}/api/projects`, {
+      fetch(`/api/projects`, {
         method: 'PATCH',
         headers: {
           'content-type': 'application/json',
@@ -121,7 +122,7 @@ const Edit: FC<IProps> = ({ project }) => {
         router.push(`/${id ? `project/${id}` : ''}`);
       });
     } else {
-      fetch(`${server}/api/projects`, {
+      fetch(`/api/projects`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -220,22 +221,25 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
   const { id } = ctx.query;
 
-  if (!id)
+  if (!id) {
     return {
       props: {},
     };
+  }
 
-  const res = await fetch(`${server}/api/projects/${id}`);
-  const project = await res.json();
+  const project = await getProject(id as string);
 
-  if (project.error)
+  if (!project) {
     return {
       props: {},
     };
+  }
+
+  const serializedProject = serializeProject(project);
 
   return {
     props: {
-      project,
+      project: serializedProject,
     },
   };
 };

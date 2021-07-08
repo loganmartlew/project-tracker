@@ -1,16 +1,17 @@
-import { server } from '@config';
 import { useState, useEffect, FC } from 'react';
 import { ContentWrapper } from '@components/pageStyles/HomeStyles';
 import Header from '@components/layout/Header';
 import ListFilters from '@components/ListFilters';
 import ProjectList from '@components/ProjectList';
-import { Filter, Project, SortType } from '@types';
+import { Filter, Project, SerializedProject, SortType } from '@types';
 import { GetStaticProps } from 'next';
 import projStringToDate from '@util/project/projStringToDate';
 import getProjectProgress from '@util/project/getProjectProgress';
+import getProjects from '@util/db/getProjects';
+import serializeProject from '@util/project/serializeProject';
 
 interface IProps {
-  projects: Project[];
+  projects: SerializedProject[];
 }
 
 const defaultFilter: Filter = {
@@ -23,7 +24,9 @@ const defaultSort: SortType = {
   order: 'asc',
 };
 
-const Home: FC<IProps> = ({ projects }) => {
+const Home: FC<IProps> = ({ projects: propsProjects }) => {
+  const projects = propsProjects.map(project => projStringToDate(project));
+
   const [allProjects, setProjects] = useState<Project[]>(projects);
 
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
@@ -36,9 +39,14 @@ const Home: FC<IProps> = ({ projects }) => {
 
   // Refetch projects client side
   useEffect(() => {
-    fetch(`${server}/api/projects`)
+    fetch(`/api/projects`)
       .then(res => res.json())
-      .then(projects => setProjects(projects));
+      .then(projects => {
+        projects = projects.map((project: SerializedProject) =>
+          projStringToDate(project)
+        );
+        setProjects(projects);
+      });
   }, []);
 
   // Filter on filter change
@@ -77,9 +85,6 @@ const Home: FC<IProps> = ({ projects }) => {
       switch (sort.field) {
         case 'Start Date':
           newProjects.sort((a, b) => {
-            projStringToDate(a);
-            projStringToDate(b);
-
             if (sort.order === 'asc') {
               console.log('ascending');
               return a.startDate.getTime() - b.startDate.getTime();
@@ -97,9 +102,6 @@ const Home: FC<IProps> = ({ projects }) => {
           newProjects = newProjects.filter(project => project.endDate);
 
           newProjects.sort((a, b) => {
-            projStringToDate(a);
-            projStringToDate(b);
-
             if (sort.order === 'asc') {
               return a.endDate!.getTime() - b.endDate!.getTime();
             }
@@ -115,9 +117,6 @@ const Home: FC<IProps> = ({ projects }) => {
           newProjects = newProjects.filter(project => project.dueDate);
 
           newProjects.sort((a, b) => {
-            projStringToDate(a);
-            projStringToDate(b);
-
             if (sort.order === 'asc') {
               return a.dueDate!.getTime() - b.dueDate!.getTime();
             }
@@ -172,12 +171,15 @@ const Home: FC<IProps> = ({ projects }) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch(`${server}/api/projects`);
-  const projects = await res.json();
+  const projects = await getProjects();
+
+  const serializedProjects = projects.map((project: Project) =>
+    serializeProject(project)
+  );
 
   return {
     props: {
-      projects,
+      projects: serializedProjects,
     },
     revalidate: 43200, // 12 hrs
   };
