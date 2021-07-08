@@ -2,6 +2,16 @@ import { FormEventHandler, useRef } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { getSession, signin } from 'next-auth/client';
+import Header from '@components/layout/Header';
+import Button from '@components/Button';
+import {
+  PageWrapper,
+  Heading,
+  SigninForm,
+  FormField,
+  FieldLabel,
+  FieldInput,
+} from '@components/pageStyles/SigninStyles';
 
 const SignIn = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -29,17 +39,28 @@ const SignIn = () => {
   };
 
   return (
-    <form onSubmit={submit}>
-      <label htmlFor='email'>
-        <span>Email: </span>
-        <input type='email' id='email' ref={emailRef} required />
-      </label>
-      <label htmlFor='password'>
-        <span>Password: </span>
-        <input type='password' id='password' ref={passwordRef} required />
-      </label>
-      <button type='submit'>Sign In</button>
-    </form>
+    <>
+      <Header />
+      <PageWrapper>
+        <Heading>Sign In</Heading>
+        <SigninForm onSubmit={submit}>
+          <FormField htmlFor='email'>
+            <FieldLabel>Email: </FieldLabel>
+            <FieldInput type='email' id='email' ref={emailRef} required />
+          </FormField>
+          <FormField htmlFor='password'>
+            <FieldLabel>Password: </FieldLabel>
+            <FieldInput
+              type='password'
+              id='password'
+              ref={passwordRef}
+              required
+            />
+          </FormField>
+          <Button type='submit'>Sign In</Button>
+        </SigninForm>
+      </PageWrapper>
+    </>
   );
 };
 
