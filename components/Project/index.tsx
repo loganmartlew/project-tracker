@@ -1,4 +1,3 @@
-import { server } from '@config';
 import { FC } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'styled-components';
@@ -26,7 +25,7 @@ const ProjectComponent: FC<ProjectProps> = ({ project }) => {
   return (
     <ProjectContainer>
       <ProjectHeading>
-        <Link href={`${server}/project/${project._id}`} passHref>
+        <Link href={`/project/${project._id}`} passHref>
           <ProjectName>{project.name}</ProjectName>
         </Link>
         {project.featured && <FeaturedIcon />}
